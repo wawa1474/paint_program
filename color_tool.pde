@@ -10,6 +10,7 @@ GCustomSlider editor_slider_blue;
 GCustomSlider editor_slider_hue;
 GCustomSlider editor_slider_saturation;
 GCustomSlider editor_slider_brightness;
+GCustomSlider editor_slider_alpha;
 
 boolean sliderBackgroundsChanged = true;
 
@@ -76,6 +77,10 @@ public void createGUI(){
   
   colorMode(RGB, 255);
   
+  editor_slider_alpha = new GCustomSlider(this, 215, 300, 122, 16, customSliderPath);
+  editor_slider_alpha.setLimits(127, 0, 255);
+  editor_slider_alpha.addEventHandler(this, "editor_alphaSlider_handler");
+  
   editor_slider_red.setValue(red(currentTileColor));
   editor_slider_green.setValue(green(currentTileColor));
   editor_slider_blue.setValue(blue(currentTileColor));
@@ -89,6 +94,7 @@ public void createGUI(){
   editor_colorTools_panel.addControl(editor_slider_hue);
   editor_colorTools_panel.addControl(editor_slider_saturation);
   editor_colorTools_panel.addControl(editor_slider_brightness);
+  editor_colorTools_panel.addControl(editor_slider_alpha);
   
   
   tmpGradient = createGraphics(100,16);
@@ -103,7 +109,7 @@ public void createGUI(){
   
   hueLabel.setIcon(hueBack, 1, null, null);
   
-  alphaLabel = new GLabel(this, 215, 340, 100, 16, "");
+  alphaLabel = new GLabel(this, 215, 300, 100, 16, "");
   
   editor_colorTools_panel.addControl(redLabel);
   editor_colorTools_panel.addControl(greenLabel);
@@ -293,11 +299,15 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
 }
 
 public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
-  if(currentColorSlider >= 0 && currentColorSlider <= 2){
+  boolean HSBSliders = currentColorSlider >= 0 && currentColorSlider <= 2;
+  if(HSBSliders){
     colorMode(HSB, 255);
   }
   
   switch(currentColorSlider){
+    case -1:
+      break;
+
     case 0:
       currentTileColor = color(editor_slider_hue.getValueF(),saturation(currentTileColor),brightness(currentTileColor));
       break;
@@ -323,21 +333,19 @@ public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
       break;
   }
   
-  if(currentColorSlider >= 0 && currentColorSlider <= 2){
+  if(HSBSliders){
     colorMode(RGB, 255);
   }
   
-  if(currentColorSlider >= 0 && currentColorSlider <= 2){
+  if(HSBSliders){
     editor_slider_red.setValue(red(currentTileColor));
     editor_slider_green.setValue(green(currentTileColor));
     editor_slider_blue.setValue(blue(currentTileColor));
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }else if(currentColorSlider >= 3 && currentColorSlider <= 5){
     editor_slider_hue.setValue(hue(currentTileColor));
     editor_slider_saturation.setValue(saturation(currentTileColor));
     editor_slider_brightness.setValue(brightness(currentTileColor));
-  }
-  
-  if(currentColorSlider != -1){
     UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
@@ -358,4 +366,8 @@ public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
   }
   
   sliderBackgroundsChanged = true;
+}
+
+public void editor_alphaSlider_handler(GCustomSlider source, GEvent event){
+  currentTileColor = color(red(currentTileColor),green(currentTileColor),blue(currentTileColor),editor_slider_alpha.getValueF());
 }

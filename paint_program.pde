@@ -21,7 +21,7 @@ void setup(){
 }
 
 void draw(){
-  //background(137);
+  background(0);
   image(image, 0, 0);
   if(sliderBackgroundsChanged){
     updateSliderBackgrounds();
