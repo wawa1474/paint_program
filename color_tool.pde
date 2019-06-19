@@ -49,30 +49,30 @@ public void createGUI(){
   
   editor_slider_red = new GCustomSlider(this, 204, 20, 122, 16, customSliderPath);
   editor_slider_red.setLimits(127, 0, 255);
-  editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
+  editor_slider_red.addEventHandler(this, "editor_colorSlider_handler");
   
   editor_slider_green = new GCustomSlider(this, 204, 36, 122, 16, customSliderPath);
   editor_slider_green.setLimits(127, 0, 255);
-  editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
+  editor_slider_green.addEventHandler(this, "editor_colorSlider_handler");
   
   editor_slider_blue = new GCustomSlider(this, 204, 52, 122, 16, customSliderPath);
   editor_slider_blue.setLimits(127, 0, 255);
-  editor_slider_blue.addEventHandler(this, "editor_RGBSlider_handler");
+  editor_slider_blue.addEventHandler(this, "editor_colorSlider_handler");
   //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
   
   colorMode(HSB, 255);
   
   editor_slider_hue = new GCustomSlider(this, 204, 84, 122, 16, customSliderPath);
   editor_slider_hue.setLimits(127, 0, 255);
-  editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
+  editor_slider_hue.addEventHandler(this, "editor_colorSlider_handler");
   
   editor_slider_saturation = new GCustomSlider(this, 204, 100, 122, 16, customSliderPath);
   editor_slider_saturation.setLimits(127, 0, 255);
-  editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
+  editor_slider_saturation.addEventHandler(this, "editor_colorSlider_handler");
   
   editor_slider_brightness = new GCustomSlider(this, 204, 116, 122, 16, customSliderPath);
   editor_slider_brightness.setLimits(127, 0, 255);
-  editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
+  editor_slider_brightness.addEventHandler(this, "editor_colorSlider_handler");
   
   colorMode(RGB, 255);
   
@@ -292,73 +292,69 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
   sliderBackgroundsChanged = true;
 }
 
-public void editor_RGBSlider_handler(GCustomSlider source, GEvent event){
-  //GEvent.VALUE_STEADY
-  //println(event);
-  
-  if(currentColorSlider == 3){
-    currentTileColor = color(editor_slider_red.getValueF(),green(currentTileColor),blue(currentTileColor));
-  }
-  if(currentColorSlider == 4){
-    currentTileColor = color(red(currentTileColor),editor_slider_green.getValueF(),blue(currentTileColor));
-  }
-  if(currentColorSlider == 5){
-    currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_slider_blue.getValueF());
+public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
+  if(currentColorSlider >= 0 && currentColorSlider <= 2){
+    colorMode(HSB, 255);
   }
   
-  if(currentColorSlider == 3 || currentColorSlider == 4 || currentColorSlider == 5){
-    editor_slider_hue.setValue(hue(currentTileColor));
-    editor_slider_saturation.setValue(saturation(currentTileColor));
-    editor_slider_brightness.setValue(brightness(currentTileColor));
-    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
-  }
-  
-  if(source == editor_slider_red && currentColorSlider == -1){
-    currentColorSlider = 3;
-  }
-  
-  if(source == editor_slider_green && currentColorSlider == -1){
-    currentColorSlider = 4;
-  }
-  
-  if(source == editor_slider_blue && currentColorSlider == -1){
-    currentColorSlider = 5;
-  }
-  
-  sliderBackgroundsChanged = true;
-}
+  switch(currentColorSlider){
+    case 0:
+      currentTileColor = color(editor_slider_hue.getValueF(),saturation(currentTileColor),brightness(currentTileColor));
+      break;
 
-public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
-  //GEvent.VALUE_STEADY
-  colorMode(HSB, 255);
-  if(currentColorSlider == 0){
-    currentTileColor = color(editor_slider_hue.getValueF(),saturation(currentTileColor),brightness(currentTileColor));
+    case 1:
+      currentTileColor = color(hue(currentTileColor),editor_slider_saturation.getValueF(),brightness(currentTileColor));
+      break;
+
+    case 2:
+      currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_slider_brightness.getValueF());
+      break;
+
+    case 3:
+      currentTileColor = color(editor_slider_red.getValueF(),green(currentTileColor),blue(currentTileColor));
+      break;
+
+    case 4:
+      currentTileColor = color(red(currentTileColor),editor_slider_green.getValueF(),blue(currentTileColor));
+      break;
+
+    case 5:
+      currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_slider_blue.getValueF());
+      break;
   }
-  if(currentColorSlider == 1){
-    currentTileColor = color(hue(currentTileColor),editor_slider_saturation.getValueF(),brightness(currentTileColor));
-  }
-  if(currentColorSlider == 2){
-    currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_slider_brightness.getValueF());
-  }
-  colorMode(RGB, 255);
   
-  if(currentColorSlider == 0 || currentColorSlider == 1 || currentColorSlider == 2){
+  if(currentColorSlider >= 0 && currentColorSlider <= 2){
+    colorMode(RGB, 255);
+  }
+  
+  if(currentColorSlider >= 0 && currentColorSlider <= 2){
     editor_slider_red.setValue(red(currentTileColor));
     editor_slider_green.setValue(green(currentTileColor));
     editor_slider_blue.setValue(blue(currentTileColor));
+  }else if(currentColorSlider >= 3 && currentColorSlider <= 5){
+    editor_slider_hue.setValue(hue(currentTileColor));
+    editor_slider_saturation.setValue(saturation(currentTileColor));
+    editor_slider_brightness.setValue(brightness(currentTileColor));
+  }
+  
+  if(currentColorSlider != -1){
     UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
-  if(source == editor_slider_hue && currentColorSlider == -1){
-    currentColorSlider = 0;
-  }
-  
-  if(source == editor_slider_saturation && currentColorSlider == -1){
-    currentColorSlider = 1;
-  }
-  
-  if(source == editor_slider_brightness && currentColorSlider == -1){
-    currentColorSlider = 2;
+  if(currentColorSlider == -1){
+    if(source == editor_slider_hue){//would use switch case here but GCustomSlider source doesn't work with it
+      currentColorSlider = 0;
+    }else if(source == editor_slider_saturation){
+      currentColorSlider = 1;
+    }else if(source == editor_slider_brightness){
+      currentColorSlider = 2;
+    }else if(source == editor_slider_red){
+      currentColorSlider = 3;
+    }else if(source == editor_slider_green){
+      currentColorSlider = 4;
+    }else if(source == editor_slider_blue){
+      currentColorSlider = 5;
+    }
   }
   
   sliderBackgroundsChanged = true;
