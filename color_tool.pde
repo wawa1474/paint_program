@@ -81,14 +81,6 @@ public void createGUI(){
   editor_slider_alpha.setLimits(127, 0, 255);
   editor_slider_alpha.addEventHandler(this, "editor_colorSlider_handler");
   
-  editor_slider_red.setValue(red(currentTileColor));
-  editor_slider_green.setValue(green(currentTileColor));
-  editor_slider_blue.setValue(blue(currentTileColor));
-  editor_slider_hue.setValue(hue(currentTileColor));
-  editor_slider_saturation.setValue(saturation(currentTileColor));
-  editor_slider_brightness.setValue(brightness(currentTileColor));
-  editor_slider_alpha.setValue(alpha(currentTileColor));
-  
   editor_colorTools_panel.addControl(editor_slider_red);
   editor_colorTools_panel.addControl(editor_slider_green);
   editor_colorTools_panel.addControl(editor_slider_blue);
@@ -240,9 +232,10 @@ void drawAlphaGradient(){
   tmpGradient.clear();
   tmpGradient.image(alphaBack, 0, 0);
   for(float i = 0; i <= 1; i+=0.020001){
-    tmpGradient.fill(color(red(currentTileColor), green(currentTileColor), blue(currentTileColor), i*255));
-    tmpGradient.rect((i*100), 0, 2, 16);
-    //println(i*100);
+    if(i != 0){
+      tmpGradient.fill(color(red(currentTileColor), green(currentTileColor), blue(currentTileColor), i*255));
+      tmpGradient.rect((i*100), 0, 2, 16);
+    }
   }
   tmpGradient.endDraw();
 }
@@ -289,6 +282,13 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputR.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
     colorInputG.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
     colorInputB.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
+    editor_slider_red.setValue(red(currentTileColor));
+    editor_slider_green.setValue(green(currentTileColor));
+    editor_slider_blue.setValue(blue(currentTileColor));
+    editor_slider_hue.setValue(hue(currentTileColor));
+    editor_slider_saturation.setValue(saturation(currentTileColor));
+    editor_slider_brightness.setValue(brightness(currentTileColor));
+    editor_slider_alpha.setValue(alpha(currentTileColor));
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorInputR.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
