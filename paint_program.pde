@@ -23,5 +23,8 @@ void setup(){
 void draw(){
   //background(137);
   image(image, 0, 0);
-  updateSliderBackgrounds();
+  if(sliderBackgroundsChanged){
+    updateSliderBackgrounds();
+    sliderBackgroundsChanged = false;
+  }
 }

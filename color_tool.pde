@@ -11,6 +11,8 @@ GCustomSlider editor_slider_hue;
 GCustomSlider editor_slider_saturation;
 GCustomSlider editor_slider_brightness;
 
+boolean sliderBackgroundsChanged = true;
+
 PImage alphaBack;
 PImage hueBack;
 
@@ -42,7 +44,7 @@ public void createGUI(){
   editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
   editor_colorTools_panel.setCollapsed(true);
   
-  File customSlider = new File(programDirectory + "/assets/sliders/blank3/");
+  File customSlider = new File(assetsFolder + "/sliders/blank3/");
   String customSliderPath = customSlider.getAbsolutePath();
   
   editor_slider_red = new GCustomSlider(this, 204, 20, 122, 16, customSliderPath);
@@ -286,6 +288,8 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputG.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
     colorInputB.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
   }
+  
+  sliderBackgroundsChanged = true;
 }
 
 public void editor_RGBSlider_handler(GCustomSlider source, GEvent event){
@@ -321,7 +325,7 @@ public void editor_RGBSlider_handler(GCustomSlider source, GEvent event){
     currentColorSlider = 5;
   }
   
-  //updateSliderBackgrounds();
+  sliderBackgroundsChanged = true;
 }
 
 public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
@@ -357,5 +361,5 @@ public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
     currentColorSlider = 2;
   }
   
-  //updateSliderBackgrounds();
+  sliderBackgroundsChanged = true;
 }
