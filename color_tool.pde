@@ -77,9 +77,9 @@ public void createGUI(){
   
   colorMode(RGB, 255);
   
-  editor_slider_alpha = new GCustomSlider(this, 215, 300, 122, 16, customSliderPath);
+  editor_slider_alpha = new GCustomSlider(this, 204, 300, 122, 16, customSliderPath);
   editor_slider_alpha.setLimits(127, 0, 255);
-  editor_slider_alpha.addEventHandler(this, "editor_alphaSlider_handler");
+  editor_slider_alpha.addEventHandler(this, "editor_colorSlider_handler");
   
   editor_slider_red.setValue(red(currentTileColor));
   editor_slider_green.setValue(green(currentTileColor));
@@ -87,6 +87,7 @@ public void createGUI(){
   editor_slider_hue.setValue(hue(currentTileColor));
   editor_slider_saturation.setValue(saturation(currentTileColor));
   editor_slider_brightness.setValue(brightness(currentTileColor));
+  editor_slider_alpha.setValue(alpha(currentTileColor));
   
   editor_colorTools_panel.addControl(editor_slider_red);
   editor_colorTools_panel.addControl(editor_slider_green);
@@ -299,6 +300,11 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
 }
 
 public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
+  if(source == editor_slider_alpha){
+    currentTileColor = color(red(currentTileColor),green(currentTileColor),blue(currentTileColor),editor_slider_alpha.getValueF());
+    return;
+  }
+  
   boolean HSBSliders = currentColorSlider >= 0 && currentColorSlider <= 2;
   if(HSBSliders){
     colorMode(HSB, 255);
@@ -366,8 +372,4 @@ public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
   }
   
   sliderBackgroundsChanged = true;
-}
-
-public void editor_alphaSlider_handler(GCustomSlider source, GEvent event){
-  currentTileColor = color(red(currentTileColor),green(currentTileColor),blue(currentTileColor),editor_slider_alpha.getValueF());
 }
