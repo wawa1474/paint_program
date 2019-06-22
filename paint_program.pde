@@ -19,14 +19,15 @@ void setup(){
   UIControls = new ControlP5(this);//set up all the control stuff
   setupControlP5();
   
-  //generateWheel();
+  generateEmptyWheel();
 }
 
 void draw(){
   background(255);
-  image(image, 0, 0);
+  //image(image, 0, 0);
   if(sliderBackgroundsChanged){
     updateSliderBackgrounds();
     sliderBackgroundsChanged = false;
   }
+  image(wheel,0,0);
 }
