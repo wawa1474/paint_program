@@ -31,6 +31,9 @@ void draw(){
     updateSliderBackgrounds();
     sliderBackgroundsChanged = false;
   }
+  noFill();
+  stroke(255);
+  rect(mouseX-hT/2,mouseY-hT/2,hT,hT);
   //image(wheel,0,0);
   //image(tri,256,0);
 }

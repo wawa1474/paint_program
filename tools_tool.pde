@@ -4,6 +4,7 @@ int editor_toolTools_panel_Height = UIscl * 10;
 GSlider editor_slider_size;
 
 public void createTools(){
+  G4P.messagesEnabled(false);
   //File assetsFolder = new File(programDirectory + "/assets/");
   //File customSlider = new File(assetsFolder + "/sliders/blank3/");
   //String customSliderPath = customSlider.getAbsolutePath();
@@ -13,7 +14,7 @@ public void createTools(){
   editor_toolTools_panel.setCollapsed(true);
   
   editor_slider_size = new GSlider(this, 204, 20, 122, 16, 16);
-  editor_slider_size.setLimits(5, 0, 20);
+  editor_slider_size.setLimits(5, 1, 20);
   editor_slider_size.addEventHandler(this, "editor_sizeSlider_handler");
   
   editor_toolTools_panel.addControl(editor_slider_size);
