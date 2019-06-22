@@ -18,10 +18,12 @@ void setup(){
   createGUI();
   UIControls = new ControlP5(this);//set up all the control stuff
   setupControlP5();
+  
+  //generateWheel();
 }
 
 void draw(){
-  background(0);
+  background(255);
   image(image, 0, 0);
   if(sliderBackgroundsChanged){
     updateSliderBackgrounds();
