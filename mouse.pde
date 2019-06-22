@@ -1,5 +1,5 @@
 void mousePressed(){//We pressed the mouse button
-  if(!mouseOver_colorToolsPanel()){
+  if(!mouseOver_panel(editor_colorTools_panel) && !mouseOver_panel(editor_toolTools_panel)){
     image.loadPixels();
     //image.set(mouseX, mouseY, currentTileColor);
     image.pixels[(mouseY * width) + mouseX] = currentTileColor;
@@ -9,7 +9,7 @@ void mousePressed(){//We pressed the mouse button
 
 int hT = 10;
 void mouseDragged(){//We dragged the mouse button
-  if(!mouseOver_colorToolsPanel()){
+  if(!mouseOver_panel(editor_colorTools_panel) && !mouseOver_panel(editor_toolTools_panel)){
     //image.set(mouseX, mouseY, currentTileColor);
     image.loadPixels();
     //image.pixels[(mouseY * width) + mouseX] = currentTileColor;

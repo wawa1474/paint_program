@@ -240,28 +240,28 @@ void drawAlphaGradient(){
   tmpGradient.endDraw();
 }
 
-boolean mouseOver_colorToolsPanel(){
+boolean mouseOver_panel(GPanel panel){
   boolean Xinside = false;
   boolean Yinside = false;
   boolean inside = false;
   
-  if(mouseX > editor_colorTools_panel.getX()){
-    if(editor_colorTools_panel.isCollapsed()){
+  if(mouseX > panel.getX()){
+    if(panel.isCollapsed()){
       
-    }else if(mouseX < editor_colorTools_panel.getX() + editor_colorTools_panel.getWidth()){
+    }else if(mouseX < panel.getX() + panel.getWidth()){
       Xinside = true;
     }
   }
   
-  if(mouseY > editor_colorTools_panel.getY()){
-    if(editor_colorTools_panel.isCollapsed()){
+  if(mouseY > panel.getY()){
+    if(panel.isCollapsed()){
       
-    }else if(mouseY < editor_colorTools_panel.getY() + editor_colorTools_panel.getHeight()){
+    }else if(mouseY < panel.getY() + panel.getHeight()){
       Yinside = true;
     }
   }
   
-  inside = editor_colorTools_panel.isOver(mouseX, mouseY) || editor_colorTools_panel.isDragging();
+  inside = panel.isOver(mouseX, mouseY) || panel.isDragging();
   
   return (Xinside && Yinside) || inside;
 }
