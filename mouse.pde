@@ -8,6 +8,7 @@ void mousePressed(){//We pressed the mouse button
         break;
       
       case RIGHT:
+        brush(secondaryColor);
         break;
       
       case CENTER:
@@ -34,6 +35,7 @@ void mouseDragged(){//We dragged the mouse button
         break;
       
       case RIGHT:
+        brush(secondaryColor);
         break;
       
       case CENTER:

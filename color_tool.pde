@@ -29,11 +29,13 @@ GLabel brightnessLabel;
 
 GLabel alphaLabel;
 
+GButton changeColor;
+
 Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 
 public void createColorTools(){
-  G4P.messagesEnabled(false);
+  //G4P.messagesEnabled(false);
   GButton.useRoundCorners(false);
   G4P.mouseWheelDirection(G4P.REVERSE);
   
@@ -81,6 +83,9 @@ public void createColorTools(){
   editor_slider_alpha.setLimits(127, 0, 255);
   editor_slider_alpha.addEventHandler(this, "editor_colorSlider_handler");
   
+  changeColor = new GButton(this, 204, 300, 122, 32, "primary/secondary");
+  changeColor.addEventHandler(this, "editor_colorButton_handler");
+  
   editor_colorTools_panel.addControl(editor_slider_red);
   editor_colorTools_panel.addControl(editor_slider_green);
   editor_colorTools_panel.addControl(editor_slider_blue);
@@ -88,6 +93,7 @@ public void createColorTools(){
   editor_colorTools_panel.addControl(editor_slider_saturation);
   editor_colorTools_panel.addControl(editor_slider_brightness);
   editor_colorTools_panel.addControl(editor_slider_alpha);
+  editor_colorTools_panel.addControl(changeColor);
   
   
   tmpGradient = createGraphics(100,16);
@@ -114,7 +120,7 @@ public void createColorTools(){
 }
 
 void setupControlP5(){
-  UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
+  UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(primaryColor).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
       if(currentColorSlider == -1){
@@ -122,14 +128,14 @@ void setupControlP5(){
       }
       
       if(currentColorSlider == 99){
-        currentTileColor = UIControls.get(ColorWheel.class, "colorWheel").getRGB();
+        setColor(UIControls.get(ColorWheel.class, "colorWheel").getRGB());
         
-        editor_slider_red.setValue(red(currentTileColor));
-        editor_slider_green.setValue(green(currentTileColor));
-        editor_slider_blue.setValue(blue(currentTileColor));
-        editor_slider_hue.setValue(hue(currentTileColor));
-        editor_slider_saturation.setValue(saturation(currentTileColor));
-        editor_slider_brightness.setValue(brightness(currentTileColor));
+        editor_slider_red.setValue(red(primaryColor));
+        editor_slider_green.setValue(green(primaryColor));
+        editor_slider_blue.setValue(blue(primaryColor));
+        editor_slider_hue.setValue(hue(primaryColor));
+        editor_slider_saturation.setValue(saturation(primaryColor));
+        editor_slider_brightness.setValue(brightness(primaryColor));
         
         //updateSliderBackgrounds();
       }
@@ -172,7 +178,7 @@ void drawRedGradient(){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(color(0, green(currentTileColor), blue(currentTileColor)), color(255, green(currentTileColor), blue(currentTileColor)), i));
+    tmpGradient.fill(lerpColor(color(0, green(primaryColor), blue(primaryColor)), color(255, green(primaryColor), blue(primaryColor)), i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();
@@ -182,7 +188,7 @@ void drawGreenGradient(){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(color(red(currentTileColor), 0, blue(currentTileColor)), color(red(currentTileColor), 255, blue(currentTileColor)), i));
+    tmpGradient.fill(lerpColor(color(red(primaryColor), 0, blue(primaryColor)), color(red(primaryColor), 255, blue(primaryColor)), i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();
@@ -192,7 +198,7 @@ void drawBlueGradient(){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(color(red(currentTileColor), green(currentTileColor), 0), color(red(currentTileColor), green(currentTileColor), 255), i));
+    tmpGradient.fill(lerpColor(color(red(primaryColor), green(primaryColor), 0), color(red(primaryColor), green(primaryColor), 255), i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();
@@ -200,8 +206,8 @@ void drawBlueGradient(){
 
 void drawSaturationGradient(){
   colorMode(HSB, 255);
-  color lowSat = color(hue(currentTileColor), 0, brightness(currentTileColor));
-  color highSat = color(hue(currentTileColor), 255, brightness(currentTileColor));
+  color lowSat = color(hue(primaryColor), 0, brightness(primaryColor));
+  color highSat = color(hue(primaryColor), 255, brightness(primaryColor));
   colorMode(RGB, 255);
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
@@ -214,8 +220,8 @@ void drawSaturationGradient(){
 
 void drawBrightnessGradient(){
   colorMode(HSB, 255);
-  color lowBright = color(hue(currentTileColor), saturation(currentTileColor), 0);
-  color highBright = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  color lowBright = color(hue(primaryColor), saturation(primaryColor), 0);
+  color highBright = color(hue(primaryColor), saturation(primaryColor), 255);
   colorMode(RGB, 255);
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
@@ -233,7 +239,7 @@ void drawAlphaGradient(){
   tmpGradient.image(alphaBack, 0, 0);
   for(float i = 0; i <= 1; i+=0.020001){
     if(i != 0){
-      tmpGradient.fill(color(red(currentTileColor), green(currentTileColor), blue(currentTileColor), i*255));
+      tmpGradient.fill(color(red(primaryColor), green(primaryColor), blue(primaryColor), i*255));
       tmpGradient.rect((i*100), 0, 2, 16);
     }
   }
@@ -282,13 +288,13 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputR.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
     colorInputG.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
     colorInputB.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
-    editor_slider_red.setValue(red(currentTileColor));
-    editor_slider_green.setValue(green(currentTileColor));
-    editor_slider_blue.setValue(blue(currentTileColor));
-    editor_slider_hue.setValue(hue(currentTileColor));
-    editor_slider_saturation.setValue(saturation(currentTileColor));
-    editor_slider_brightness.setValue(brightness(currentTileColor));
-    editor_slider_alpha.setValue(alpha(currentTileColor));
+    editor_slider_red.setValue(red(primaryColor));
+    editor_slider_green.setValue(green(primaryColor));
+    editor_slider_blue.setValue(blue(primaryColor));
+    editor_slider_hue.setValue(hue(primaryColor));
+    editor_slider_saturation.setValue(saturation(primaryColor));
+    editor_slider_brightness.setValue(brightness(primaryColor));
+    editor_slider_alpha.setValue(alpha(primaryColor));
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorInputR.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
@@ -301,7 +307,7 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
 
 public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
   if(source == editor_slider_alpha){
-    currentTileColor = color(red(currentTileColor),green(currentTileColor),blue(currentTileColor),editor_slider_alpha.getValueF());
+    setColor(color(red(primaryColor),green(primaryColor),blue(primaryColor),editor_slider_alpha.getValueF()));
     return;
   }
   
@@ -315,27 +321,27 @@ public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
       break;
 
     case 0:
-      currentTileColor = color(editor_slider_hue.getValueF(),saturation(currentTileColor),brightness(currentTileColor));
+      setColor(color(editor_slider_hue.getValueF(),saturation(primaryColor),brightness(primaryColor)));
       break;
 
     case 1:
-      currentTileColor = color(hue(currentTileColor),editor_slider_saturation.getValueF(),brightness(currentTileColor));
+      setColor(color(hue(primaryColor),editor_slider_saturation.getValueF(),brightness(primaryColor)));
       break;
 
     case 2:
-      currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_slider_brightness.getValueF());
+      setColor(color(hue(primaryColor),saturation(primaryColor),editor_slider_brightness.getValueF()));
       break;
 
     case 3:
-      currentTileColor = color(editor_slider_red.getValueF(),green(currentTileColor),blue(currentTileColor));
+      setColor(color(editor_slider_red.getValueF(),green(primaryColor),blue(primaryColor)));
       break;
 
     case 4:
-      currentTileColor = color(red(currentTileColor),editor_slider_green.getValueF(),blue(currentTileColor));
+      setColor(color(red(primaryColor),editor_slider_green.getValueF(),blue(primaryColor)));
       break;
 
     case 5:
-      currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_slider_blue.getValueF());
+      setColor(color(red(primaryColor),green(primaryColor),editor_slider_blue.getValueF()));
       break;
   }
   
@@ -344,15 +350,15 @@ public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
   }
   
   if(HSBSliders){
-    editor_slider_red.setValue(red(currentTileColor));
-    editor_slider_green.setValue(green(currentTileColor));
-    editor_slider_blue.setValue(blue(currentTileColor));
-    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
+    editor_slider_red.setValue(red(primaryColor));
+    editor_slider_green.setValue(green(primaryColor));
+    editor_slider_blue.setValue(blue(primaryColor));
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(primaryColor);
   }else if(currentColorSlider >= 3 && currentColorSlider <= 5){
-    editor_slider_hue.setValue(hue(currentTileColor));
-    editor_slider_saturation.setValue(saturation(currentTileColor));
-    editor_slider_brightness.setValue(brightness(currentTileColor));
-    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
+    editor_slider_hue.setValue(hue(primaryColor));
+    editor_slider_saturation.setValue(saturation(primaryColor));
+    editor_slider_brightness.setValue(brightness(primaryColor));
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(primaryColor);
   }
   
   if(currentColorSlider == -1){
@@ -373,3 +379,27 @@ public void editor_colorSlider_handler(GCustomSlider source, GEvent event){
   
   sliderBackgroundsChanged = true;
 }
+
+void editor_colorButton_handler(GButton source, GEvent event){
+  //println(changingColor);
+  switch(changingColor){
+    case 0:
+      changingColor = 1;
+      break;
+    case 1:
+      changingColor = 0;
+      break;
+  }
+}
+
+//void handleButtonEvents(GButton button, GEvent event) {
+//  println(changingColor);
+//  switch(changingColor){
+//    case 0:
+//      changingColor = 1;
+//      break;
+//    case 1:
+//      changingColor = 0;
+//      break;
+//  }
+//}
