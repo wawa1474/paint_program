@@ -32,7 +32,7 @@ GLabel alphaLabel;
 Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 
-public void createGUI(){
+public void createColorTools(){
   G4P.messagesEnabled(false);
   GButton.useRoundCorners(false);
   G4P.mouseWheelDirection(G4P.REVERSE);

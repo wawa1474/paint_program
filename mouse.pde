@@ -2,7 +2,18 @@ void mousePressed(){//We pressed the mouse button
   if(!mouseOver_panel(editor_colorTools_panel) && !mouseOver_panel(editor_toolTools_panel)){
     image.loadPixels();
     //image.set(mouseX, mouseY, currentTileColor);
-    image.pixels[(mouseY * width) + mouseX] = currentTileColor;
+    switch(mouseButton){
+      case LEFT:
+        brush();
+        break;
+      
+      case RIGHT:
+        break;
+      
+      case CENTER:
+        bucket();
+        break;
+    }
     image.updatePixels();
   }
 }//void mousePressed() END
@@ -17,20 +28,17 @@ void mouseDragged(){//We dragged the mouse button
     //image.pixels[((mouseY + 1) * width) + mouseX] = currentTileColor;
     //image.pixels[((mouseY + 1) * width) + mouseX + 1] = currentTileColor;
     
-    int wT = hT;
-    //if(mouseX >= (wT/2) && mouseY >= (hT/2) && mouseX <= width - (wT/2) && mouseY <= height - (hT/2)){
-      if(hT == 1){
-        image.pixels[(mouseY * width) + mouseX] = currentTileColor;
-      }else{
-        for(int h = -(hT/2); h < (hT/2); h++){
-          for(int w = -(wT/2); w < (wT/2); w++){
-            if(((mouseY + h) * width) + mouseX + w >= 0 && ((mouseY + h) * width) + mouseX + w < image.width * image.height){
-              image.pixels[((mouseY + h) * width) + mouseX + w] = currentTileColor;
-            }
-          }
-        }
-      }
-    //}
+    switch(mouseButton){
+      case LEFT:
+        brush();
+        break;
+      
+      case RIGHT:
+        break;
+      
+      case CENTER:
+        break;
+    }
     image.updatePixels();
   }
 }//void mouseDragged() END
@@ -42,11 +50,15 @@ void mouseReleased(){//We released the mouse button
 
 void mouseWheel(MouseEvent event_){//We Scrolled The Mouse Wheel
   if(event_.getCount() < 0){//If Scrolling Up
-    editor_slider_size.setValue(editor_slider_size.getValueF() + 1);
-    hT++;
+    if(hT < 20){
+      editor_slider_size.setValue(editor_slider_size.getValueF() + 1);
+      hT++;
+    }
   }else{
-    editor_slider_size.setValue(editor_slider_size.getValueF() - 1);
-    hT--;
+    if(hT > 1){
+      editor_slider_size.setValue(editor_slider_size.getValueF() - 1);
+      hT--;
+    }
   }
 }//void mouseWheel(event) END
 

@@ -16,7 +16,7 @@ void setup(){
   programDirectory = new File(sketchPath());
   
   createTools();
-  createGUI();
+  createColorTools();
   UIControls = new ControlP5(this);//set up all the control stuff
   setupControlP5();
   
